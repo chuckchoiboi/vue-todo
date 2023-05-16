@@ -26,8 +26,25 @@
 			</thead>
 			<tbody>
 				<tr v-for="(task, index) in tasks" :key="index">
-					<th>{{ task.name }}</th>
-					<td>{{ task.status }}</td>
+					<th>
+						<span
+							:class="{ completed: task.status === 'completed' }"
+							>{{ task.name }}</span
+						>
+					</th>
+					<td style="width: 120px">
+						<span
+							@click="changeStatus(index)"
+							class="pointer"
+							:class="{
+								'text-danger': task.status === 'to-do',
+								'text-warning': task.status === 'in-progress',
+								'text-success': task.status === 'completed',
+							}"
+						>
+							{{ firstCharUpper(task.status) }}
+						</span>
+					</td>
 					<td>
 						<div class="text-center" @click="editTask(index)">
 							<span class="fa fa-pen"></span>
@@ -54,6 +71,7 @@ export default {
 		return {
 			task: '',
 			editedTask: null as null | number,
+			taskStatus: ['to-do', 'in-progress', 'completed'],
 			tasks: [
 				{
 					name: 'Walk my dog',
@@ -102,6 +120,22 @@ export default {
 			this.task = this.tasks[index].name;
 			this.editedTask = index;
 		},
+		changeStatus(index: number) {
+			let newIndex = this.taskStatus.indexOf(this.tasks[index].status);
+			if (++newIndex > 2) newIndex = 0;
+			this.tasks[index].status = this.taskStatus[newIndex];
+		},
+		firstCharUpper(str: string) {
+			return str.charAt(0).toUpperCase() + str.slice(1);
+		},
 	},
 };
 </script>
+<style scoped>
+.pointer {
+	cursor: pointer;
+}
+.completed {
+	text-decoration: line-through;
+}
+</style>
