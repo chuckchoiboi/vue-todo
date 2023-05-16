@@ -10,7 +10,7 @@
 				class="form-control"
 			/>
 			<button @click="submitTask" class="btn btn-warning rounded-0">
-				SUBMIT
+				{{ buttonText }}
 			</button>
 		</div>
 
@@ -65,6 +65,16 @@ export default {
 				},
 			],
 		};
+	},
+
+	computed: {
+		buttonText() {
+			if (this.editedTask) {
+				return 'EDIT';
+			} else {
+				return 'SUBMIT';
+			}
+		},
 	},
 
 	methods: {
