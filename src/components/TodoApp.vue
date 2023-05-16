@@ -29,7 +29,7 @@
 					<th>{{ task.name }}</th>
 					<td>{{ task.status }}</td>
 					<td>
-						<div class="text-center">
+						<div class="text-center" @click="editTask(index)">
 							<span class="fa fa-pen"></span>
 						</div>
 					</td>
@@ -53,6 +53,7 @@ export default {
 	data() {
 		return {
 			task: '',
+			editedTask: null as null | number,
 			tasks: [
 				{
 					name: 'Walk my dog',
@@ -70,16 +71,26 @@ export default {
 		submitTask() {
 			if (this.task.length === 0) return;
 
-			this.tasks.push({
-				name: this.task,
-				status: 'to-do',
-			});
+			if (this.editedTask === null) {
+				this.tasks.push({
+					name: this.task,
+					status: 'to-do',
+				});
+			} else {
+				this.tasks[this.editedTask].name = this.task;
+				this.editedTask = null;
+			}
 
 			this.task = '';
 		},
 
 		deleteTask(index: number) {
 			this.tasks.splice(index, 1);
+		},
+
+		editTask(index: number) {
+			this.task = this.tasks[index].name;
+			this.editedTask = index;
 		},
 	},
 };
