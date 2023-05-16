@@ -3,8 +3,15 @@
 		<h2 class="text-center mt-5">My Vue Todo App</h2>
 
 		<div class="d-flex">
-			<input type="text" placeholder="Enter task" class="form-control" />
-			<button class="btn btn-warning rounded-0">SUBMIT</button>
+			<input
+				v-model="task"
+				type="text"
+				placeholder="Enter task"
+				class="form-control"
+			/>
+			<button @click="submitTask" class="btn btn-warning rounded-0">
+				SUBMIT
+			</button>
 		</div>
 
 		<!-- Task table -->
@@ -18,9 +25,9 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<th>Walk my dog</th>
-					<td>To-do</td>
+				<tr v-for="(task, index) in tasks" :key="index">
+					<th>{{ task.name }}</th>
+					<td>{{ task.status }}</td>
 					<td>
 						<div class="text-center">
 							<span class="fa fa-pen"></span>
@@ -36,3 +43,38 @@
 		</table>
 	</div>
 </template>
+<script lang="ts">
+export default {
+	name: 'HelloWorld',
+	props: {
+		msg: String,
+	},
+
+	data() {
+		return {
+			task: '',
+			tasks: [
+				{
+					name: 'Walk my dog',
+					status: 'to-do',
+				},
+				{
+					name: 'Go get groceries',
+					status: 'in-progress',
+				},
+			],
+		};
+	},
+
+	methods: {
+		submitTask() {
+			if (this.task.length === 0) return;
+
+			this.tasks.push({
+				name: this.task,
+				status: 'to-do',
+			});
+		},
+	},
+};
+</script>
